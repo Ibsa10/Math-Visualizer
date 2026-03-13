@@ -1,48 +1,75 @@
-# Interactive Math Visualizer - Portfolio Website
+# 📐 Math Visualizer
 
-This repository contains the standalone portfolio website built to showcase the **Interactive Math Visualizer** project.
+A comprehensive, interactive mathematics visualization web application built with **HTML**, **CSS**, **JavaScript**, and **PHP**.
 
-The portfolio is designed as a beautiful, interactive landing page that highlights the features, technical statistics, and the mission behind the math visualizer application.
+## Features
 
-> **Note:** This repository includes the UI code for the portfolio page itself (`portfolio.html`). For the actual Interactive Math Visualizer application code, please see the corresponding application repository or directory.
+| Module | Description |
+|--------|-------------|
+| 📈 **Function Plotter** | Plot single/dual custom functions with zoom & hover coordinates |
+| 🔷 **Geometry** | Interactive shapes with live area/perimeter calculations |
+| 📊 **Statistics** | Bar/Line/Histogram charts with full statistical summary |
+| 🔢 **Matrix Ops** | Addition, subtraction, multiplication, transpose, determinant, inverse |
+| ∫ **Calculus** | Derivative, definite integral, Riemann sum visualization |
+| 🌀 **Fractals** | Mandelbrot set, Julia set, Sierpinski triangle |
+| 〰️ **Trigonometry** | Animated unit circle with all trig functions and wave |
+| 🔍 **Number Theory** | Primes, factorization, GCD/LCM, Fibonacci, Sieve of Eratosthenes |
 
-## ✨ Features
+## Running the App
 
-- **Modern Glassmorphism UI:** Built with sleek, transparent, and layered design aesthetics.
-- **Scroll Animations:** Powered by GSAP (GreenSock) and ScrollTrigger for smooth, dynamic elements that animate as the user scrolls down the page.
-- **Custom Interactive Cursor:** A completely custom cursor that reacts creatively when hovering over buttons, links, and text.
-- **Responsive Layout:** Optimized to look beautiful on both desktop monitors and mobile devices.
-- **Dynamic Backgrounds:** Abstract glowing geometric backgrounds to give a "mathematical" feel.
-- **Zero Framework CSS:** Pure custom CSS3 leveraging CSS variables and Grid/Flexbox layouts.
+### Option 1: Open directly in browser (static features only)
+Just open `index.html` in any modern browser. All JavaScript features work without a server.
 
-## 🛠 Tech Stack
+### Option 2: With PHP backend (full features)
+Requires PHP 8.0+ with a web server.
 
-The portfolio is built purely with standard web technologies and one specialized animation library:
+**Using PHP built-in server:**
+```bash
+cd math-visualizer
+php -S localhost:8080
+```
+Then open http://localhost:8080
 
-- **HTML5:** Semantic structure (`portfolio.html`).
-- **CSS3:** Custom styling, variables, and responsive design (`portfolio.css`).
-- **JavaScript (ES6+):** Custom cursor logic and interaction scripts (`portfolio.js`).
-- **GSAP & ScrollTrigger:** Used for high-performance scroll-driven animations.
-- **Fonts:** Google Fonts (Inter for UI, JetBrains Mono for code aesthetics).
+**Using XAMPP/WAMP/LAMP:**
+Copy the `math-visualizer` folder to your `htdocs` or `www` directory and open via localhost.
 
-## 📂 Project Files
+## Project Structure
 
-- `portfolio.html` — The main structure and layout of the portfolio landing page.
-- `portfolio.css` — The complete stylesheet, including all Glassmorphism and theme variables.
-- `portfolio.js` — The logic for the custom cursor, GSAP animations, and smooth scrolling.
+```
+math-visualizer/
+├── index.html      # Main app shell with all sections
+├── style.css       # Dark/light theme styles
+├── main.js         # All JavaScript visualizations
+├── api.php         # PHP backend for server-side calculations
+└── README.md       # This file
+```
 
-## 🏁 Getting Started
+## API Endpoints (PHP)
 
-Since this is a static frontend website, it requires zero build steps or configuration to run.
+| Action | Method | Parameters | Description |
+|--------|--------|------------|-------------|
+| `statistics` | POST | `data` (JSON array) | Full stats summary |
+| `is_prime` | GET | `n` | Prime check |
+| `factorize` | GET | `n` | Prime factorization |
+| `gcd_lcm` | GET | `a`, `b` | GCD and LCM |
+| `sieve` | GET | `limit` | Sieve of Eratosthenes |
+| `fibonacci` | GET | `n` | Fibonacci sequence |
+| `geometry` | GET | `shape`, `p1`, `p2`, `p3` | Shape calculations |
+| `matrix` | POST | `op`, `matA`, `matB` | Matrix operations |
+| `evaluate` | GET | `expr` | Expression evaluator |
+| `convert` | GET | `value`, `from`, `to` | Unit conversion |
 
-1. Clone this repository to your local machine.
-2. Simply double-click on `portfolio.html` to open it in your default web browser.
+### Example API calls
+```
+GET  api.php?action=is_prime&n=97
+GET  api.php?action=factorize&n=360
+GET  api.php?action=gcd_lcm&a=48&b=36
+GET  api.php?action=sieve&limit=100
+POST api.php?action=statistics  body: data=[1,2,3,4,5]
+```
 
-Alternatively, you can serve it via Live Server in VS Code or any other basic local static file server.
-
-## 🤝 Contribution
-
-Feedback, bug reports, and suggestions for improving the portfolio design are always welcome! Feel free to open an issue or submit a pull request.
-
----
-*Built to bring complex mathematical concepts to life visually.*
+## Technologies
+- **HTML5 Canvas** for all visualizations
+- **CSS3** with CSS custom properties for theming
+- **JavaScript ES6+** with math.js library
+- **PHP 8** for server-side computation
