@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+</head>
+
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">∑</span>
+                <span class="logo-text">MathViz</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        </div>
+        <ul class="nav-list">
+            <li class="nav-item active" data-section="function-plotter">
+                <span class="nav-icon">📈</span>
+                <span class="nav-label">Function Plotter</span>
+            </li>
+            <li class="nav-item" data-section="geometry">
+                <span class="nav-icon">🔷</span>
+                <span class="nav-label">Geometry</span>
+            </li>
+            <li class="nav-item" data-section="statistics">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Statistics</span>
+            </li>
+            <li class="nav-item" data-section="matrix">
+                <span class="nav-icon">🔢</span>
+                <span class="nav-label">Matrix Ops</span>
+            </li>
+            <li class="nav-item" data-section="calculus">
+                <span class="nav-icon">∫</span>
+                <span class="nav-label">Calculus</span>
+            </li>
+            <li class="nav-item" data-section="fractals">
+                <span class="nav-icon">🌀</span>
+                <span class="nav-label">Fractals</span>
+            </li>
+            <li class="nav-item" data-section="trigonometry">
+                <span class="nav-icon">〰️</span>
+                <span class="nav-label">Trigonometry</span>
+            </li>
+            <li class="nav-item" data-section="number-theory">
+                <span class="nav-icon">🔍</span>
+                <span class="nav-label">Number Theory</span>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Header -->
+        <header class="top-header">
+            <h1 class="page-title" id="pageTitle">Function Plotter</h1>
+            <div class="header-actions">
+                <span class="theme-toggle" id="themeToggle" title="Toggle theme">🌙</span>
+            </div>
+        </header>
+
+        <!-- Sections -->
+
+        <!-- ===== FUNCTION PLOTTER ===== -->
+        <section class="section active" id="function-plotter">
+            <div class="card controls-card">
+                <h3>Plot Functions</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Function f(x)</label>
+                        <div class="input-with-btn">
+                            <input type="text" id="funcInput" class="math-input" value="sin(x)"
+                                placeholder="e.g. sin(x), x^2, exp(x)">
+                            <button class="btn btn-primary" onclick="plotFunction()">Plot</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Second Function g(x) <small>(optional)</small></label>
+                        <input type="text" id="funcInput2" class="math-input" placeholder="e.g. cos(x)">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>X Min</label>
+                        <input type="number" id="xMin" value="-10" class="math-input">
+                    </div>
+                    <div class="form-group">
+                        <label>X Max</label>
+                        <input type="number" id="xMax" value="10" class="math-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Y Min</label>
+                        <input type="number" id="yMin" value="-5" class="math-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Y Max</label>
+                        <input type="number" id="yMax" value="5" class="math-input">
+                    </div>
+                </div>
+                <div class="preset-btns">
+                    <span>Presets:</span>
+                    <button class="btn btn-sm" onclick="setPreset('sin(x)')">sin(x)</button>
+                    <button class="btn btn-sm" onclick="setPreset('cos(x)')">cos(x)</button>
+                    <button class="btn btn-sm" onclick="setPreset('x^2')">x²</button>
+                    <button class="btn btn-sm" onclick="setPreset('x^3 - 3*x')">x³-3x</button>
+                    <button class="btn btn-sm" onclick="setPreset('log(x)')">log(x)</button>
+                    <button class="btn btn-sm" onclick="setPreset('exp(x)')">eˣ</button>
+                    <button class="btn btn-sm" onclick="setPreset('tan(x)')">tan(x)</button>
+                    <button class="btn btn-sm" onclick="setPreset('abs(x)')">|x|</button>
+                </div>
+            </div>
+            <div class="card canvas-card">
+                <canvas id="functionCanvas" width="900" height="450"></canvas>
+                <div class="canvas-info" id="funcInfo">Hover over the graph to see coordinates</div>
+            </div>
+        </section>
+
+        <!-- ===== GEOMETRY ===== -->
+        <section class="section" id="geometry">
+            <div class="card controls-card">
+                <h3>Geometry Calculator & Visualizer</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Shape</label>
+                        <select id="shapeSelect" class="math-input" onchange="updateGeometryInputs()">
+                            <option value="circle">Circle</option>
+                            <option value="rectangle">Rectangle</option>
+                            <option value="triangle">Triangle</option>
+                            <option value="polygon">Regular Polygon</option>
+                            <option value="ellipse">Ellipse</option>
+                        </select>
+                    </div>
+                    <div id="geometryInputs" class="form-group">
+                        <label>Radius</label>
+                        <input type="number" id="geoParam1" value="100" class="math-input">
+                    </div>
+                    <div id="geometryInputs2" class="form-group" style="display:none">
+                        <label id="geoLabel2">Height</label>
+                        <input type="number" id="geoParam2" value="80" class="math-input">
+                    </div>
+                    <div id="geometryInputs3" class="form-group" style="display:none">
+                        <label id="geoLabel3">Sides</label>
+                        <input type="number" id="geoParam3" value="6" class="math-input" min="3" max="20">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" onclick="drawGeometry()" style="margin-top:22px">Draw</button>
+                    </div>
+                </div>
+            </div>
+            <div class="two-col">
+                <div class="card canvas-card">
+                    <canvas id="geometryCanvas" width="400" height="380"></canvas>
+                </div>
+                <div class="card info-card">
+                    <h4>Measurements</h4>
+                    <div id="geoResults" class="results-box">
+                        <p>Select a shape and click Draw to see measurements.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== STATISTICS ===== -->
+        <section class="section" id="statistics">
+            <div class="card controls-card">
+                <h3>Statistical Analysis</h3>
+                <div class="form-group">
+                    <label>Data Points (comma-separated)</label>
+                    <div class="input-with-btn">
+                        <input type="text" id="statsData" class="math-input"
+                            value="4, 7, 13, 2, 1, 9, 15, 3, 8, 6, 11, 5">
+                        <button class="btn btn-primary" onclick="analyzeStats()">Analyze</button>
+                    </div>
+                </div>
+                <div class="preset-btns">
+                    <span>Chart Type:</span>
+                    <button class="btn btn-sm active-btn" id="barBtn" onclick="setChartType('bar')">Bar</button>
+                    <button class="btn btn-sm" id="lineBtn" onclick="setChartType('line')">Line</button>
+                    <button class="btn btn-sm" id="histBtn" onclick="setChartType('histogram')">Histogram</button>
+                </div>
+            </div>
+            <div class="two-col">
+                <div class="card canvas-card">
+                    <canvas id="statsCanvas" width="500" height="350"></canvas>
+                </div>
+                <div class="card info-card">
+                    <h4>Statistics Summary</h4>
+                    <div id="statsResults" class="results-box"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== MATRIX ===== -->
+        <section class="section" id="matrix">
+            <div class="card controls-card">
+                <h3>Matrix Operations</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Matrix A (rows separated by ;, columns by ,)</label>
+                        <textarea id="matrixA" class="math-input matrix-input">1, 2, 3
+4, 5, 6
+7, 8, 9</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Matrix B</label>
+                        <textarea id="matrixB" class="math-input matrix-input">9, 8, 7
+6, 5, 4
+3, 2, 1</textarea>
+                    </div>
+                </div>
+                <div class="preset-btns">
+                    <span>Operation:</span>
+                    <button class="btn btn-sm" onclick="matrixOp('add')">A + B</button>
+                    <button class="btn btn-sm" onclick="matrixOp('subtract')">A − B</button>
+                    <button class="btn btn-sm" onclick="matrixOp('multiply')">A × B</button>
+                    <button class="btn btn-sm" onclick="matrixOp('transpose')">Transpose A</button>
+                    <button class="btn btn-sm" onclick="matrixOp('determinant')">det(A)</button>
+                    <button class="btn btn-sm" onclick="matrixOp('inverse')">A⁻¹</button>
+                </div>
+            </div>
+            <div class="card">
+                <h4>Result</h4>
+                <div id="matrixResult" class="matrix-result-box"></div>
+            </div>
+        </section>
+
+        <!-- ===== CALCULUS ===== -->
+        <section class="section" id="calculus">
+            <div class="card controls-card">
+                <h3>Calculus Visualizer</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Function f(x)</label>
+                        <input type="text" id="calcFunc" class="math-input" value="x^3 - 3*x^2 + 2">
+                    </div>
+                    <div class="form-group">
+                        <label>Mode</label>
+                        <select id="calcMode" class="math-input" onchange="renderCalculus()">
+                            <option value="derivative">Derivative f'(x)</option>
+                            <option value="integral">Definite Integral</option>
+                            <option value="riemann">Riemann Sum</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" id="integralBounds">
+                    <div class="form-group">
+                        <label>Lower Bound (a)</label>
+                        <input type="number" id="lowerBound" value="0" class="math-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Upper Bound (b)</label>
+                        <input type="number" id="upperBound" value="3" class="math-input">
+                    </div>
+                    <div class="form-group" id="riemannNDiv" style="display:none">
+                        <label>Rectangles (n)</label>
+                        <input type="number" id="riemannN" value="10" min="1" max="200" class="math-input">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" onclick="renderCalculus()"
+                            style="margin-top:22px">Visualize</button>
+                    </div>
+                </div>
+            </div>
+            <div class="two-col">
+                <div class="card canvas-card">
+                    <canvas id="calculusCanvas" width="500" height="380"></canvas>
+                </div>
+                <div class="card info-card">
+                    <h4>Results</h4>
+                    <div id="calculusResults" class="results-box"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FRACTALS ===== -->
+        <section class="section" id="fractals">
+            <div class="card controls-card">
+                <h3>Fractal Explorer</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fractal Type</label>
+                        <select id="fractalType" class="math-input">
+                            <option value="mandelbrot">Mandelbrot Set</option>
+                            <option value="julia">Julia Set</option>
+                            <option value="sierpinski">Sierpinski Triangle</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="juliaParams" style="display:none">
+                        <label>Julia c (real)</label>
+                        <input type="number" id="juliaReal" value="-0.7" step="0.01" class="math-input">
+                    </div>
+                    <div class="form-group" id="juliaParamsImag" style="display:none">
+                        <label>Julia c (imag)</label>
+                        <input type="number" id="juliaImag" value="0.27015" step="0.01" class="math-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Iterations</label>
+                        <input type="number" id="fractalIter" value="80" min="10" max="500" class="math-input">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" onclick="renderFractal()"
+                            style="margin-top:22px">Render</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card canvas-card fractal-canvas-card">
+                <canvas id="fractalCanvas" width="600" height="500"></canvas>
+                <div class="canvas-info">Rendering may take a moment...</div>
+            </div>
+        </section>
+
+        <!-- ===== TRIGONOMETRY ===== -->
+        <section class="section" id="trigonometry">
+            <div class="card controls-card">
+                <h3>Unit Circle & Trigonometry</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Angle (degrees)</label>
+                        <input type="range" id="angleSlider" min="0" max="360" value="45" class="slider"
+                            oninput="updateTrig()">
+                        <span id="angleDegDisplay" class="range-display">45°</span>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" onclick="animateTrig()" id="animBtn">▶ Animate</button>
+                    </div>
+                </div>
+            </div>
+            <div class="two-col">
+                <div class="card canvas-card">
+                    <canvas id="trigCanvas" width="380" height="380"></canvas>
+                </div>
+                <div class="card info-card">
+                    <h4>Trigonometric Values</h4>
+                    <div id="trigResults" class="results-box trig-results"></div>
+                    <canvas id="trigWaveCanvas" width="380" height="160"
+                        style="margin-top:10px; border-radius:8px;"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== NUMBER THEORY ===== -->
+        <section class="section" id="number-theory">
+            <div class="card controls-card">
+                <h3>Number Theory</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Number</label>
+                        <input type="number" id="numInput" value="100" class="math-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Second Number (for GCD/LCM)</label>
+                        <input type="number" id="numInput2" value="75" class="math-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Sieve Limit (primes up to)</label>
+                        <input type="number" id="sieveLimit" value="100" min="10" max="500" class="math-input">
+                    </div>
+                </div>
+                <div class="preset-btns">
+                    <button class="btn btn-sm" onclick="numTheory('factorize')">Factorize</button>
+                    <button class="btn btn-sm" onclick="numTheory('isPrime')">Is Prime?</button>
+                    <button class="btn btn-sm" onclick="numTheory('gcd')">GCD</button>
+                    <button class="btn btn-sm" onclick="numTheory('lcm')">LCM</button>
+                    <button class="btn btn-sm" onclick="numTheory('fibonacci')">Fibonacci</button>
+                    <button class="btn btn-sm" onclick="numTheory('sieve')">Sieve of Eratosthenes</button>
+                </div>
+            </div>
+            <div class="two-col">
+                <div class="card canvas-card">
+                    <canvas id="numberCanvas" width="500" height="350"></canvas>
+                </div>
+                <div class="card info-card">
+                    <h4>Results</h4>
+                    <div id="numResults" class="results-box"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="main.js"></script>
+</body>
